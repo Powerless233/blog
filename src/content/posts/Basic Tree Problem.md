@@ -57,6 +57,37 @@ int main()
 }
 ```
 
+在这里补充一个语法：
+
+在 dfs 遍历树的过程中，以下两种写法的效果是相同的：
+
+```cpp
+void dfs(int x, int fa)
+{
+    for (int i = 0; i < e[x].size(); i++)
+    {
+        int y = e[x][i];
+        if (y != fa)
+        {
+            ......
+        }
+    }
+}
+
+void dfs(int x, int fa)
+{
+    for (int y: e[x])
+    {
+        if (y != fa)
+        {
+            ......
+        }
+    }
+}
+```
+
+其中的第二种写法是 C++11 引入的范围 for 循环，后文不再过多解释。
+
 ## 2.树的直径 & 重心
 
 树的直径是指**树中任意两点之间路径长度的最大值**。
@@ -187,3 +218,4 @@ int main()
 3. 删除重心后，最大连通块的大小 ≤ $n/2$ 
 
 ### T3: [P1395 会议 - 洛谷](https://www.luogu.com.cn/problem/P1395)
+
