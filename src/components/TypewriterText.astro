@@ -119,21 +119,24 @@ class TypewriterEffect {
     }
 }
 
-// 初始化所有打字机效果
-document.addEventListener('DOMContentLoaded', () => {
+// 初始化所有打字机效果的函数
+const initTypewriter = () => {
     const typewriterElements = document.querySelectorAll('.typewriter');
     typewriterElements.forEach((element) => {
         new TypewriterEffect(element as HTMLElement);
     });
-});
+};
+
+// 如果 DOM 已准备好，立即初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTypewriter);
+} else {
+    // DOM 已经准备好，立即执行
+    initTypewriter();
+}
 
 // 支持页面切换时重新初始化
-document.addEventListener('swup:contentReplaced', () => {
-    const typewriterElements = document.querySelectorAll('.typewriter');
-    typewriterElements.forEach((element) => {
-        new TypewriterEffect(element as HTMLElement);
-    });
-});
+document.addEventListener('swup:contentReplaced', initTypewriter);
 </script>
 
 <style>
