@@ -110,8 +110,10 @@ const {
 const hasBannerCredit = siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
 
-// 检查是否为首页
-const isHomePage = Astro.url.pathname === "/" || Astro.url.pathname === "";
+// 检查是否为首页 - 兼容 base 路径
+const baseUrl = new URL(Astro.site || 'http://localhost').pathname.replace(/\/$/, '');
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const isHomePage = currentPath === '' || currentPath === baseUrl || currentPath === baseUrl + '/';
 const showHomeText = siteConfig.banner.homeText?.enable && isHomePage;
 // 手机端非首页不显示banner的CSS类
 const mobileNonHomeBannerClass = !isHomePage ? "mobile-hide-banner" : "";

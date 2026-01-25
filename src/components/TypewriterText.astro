@@ -69,14 +69,21 @@ class TypewriterEffect {
 
     private start() {
         if (this.texts.length === 0) return;
-        this.type();
+        // 立即同步显示第一个字符，避免初始为空
+        const currentText = this.getCurrentText();
+        if (currentText.length > 0) {
+            this.currentIndex = 1;
+            this.element.textContent = currentText.substring(0, 1);
+        }
+        // 然后继续打字机动画
+        this.displayNextChar();
     }
 
     private getCurrentText(): string {
         return this.texts[this.currentTextIndex] || '';
     }
 
-    private type() {
+    private displayNextChar() {
         const currentText = this.getCurrentText();
         
         if (this.isDeleting) {
@@ -84,29 +91,26 @@ class TypewriterEffect {
             if (this.currentIndex > 0) {
                 this.currentIndex--;
                 this.element.textContent = currentText.substring(0, this.currentIndex);
-                this.timeoutId = window.setTimeout(() => this.type(), this.deleteSpeed);
+                this.timeoutId = window.setTimeout(() => this.displayNextChar(), this.deleteSpeed);
             } else {
                 // 删除完成，切换到下一条文本
                 this.isDeleting = false;
                 this.currentTextIndex = (this.currentTextIndex + 1) % this.texts.length;
-                this.timeoutId = window.setTimeout(() => this.type(), this.speed);
+                this.timeoutId = window.setTimeout(() => this.displayNextChar(), this.speed);
             }
         } else {
             // 添加字符
             if (this.currentIndex < currentText.length) {
                 this.currentIndex++;
                 this.element.textContent = currentText.substring(0, this.currentIndex);
-                this.timeoutId = window.setTimeout(() => this.type(), this.speed);
+                this.timeoutId = window.setTimeout(() => this.displayNextChar(), this.speed);
             } else {
                 // 打字完成，暂停后开始删除（如果有多条文本）
                 if (this.texts.length > 1) {
                     this.isDeleting = true;
-                    this.timeoutId = window.setTimeout(() => this.type(), this.pauseTime);
+                    this.timeoutId = window.setTimeout(() => this.displayNextChar(), this.pauseTime);
                 } else {
-                    // 如果只有一条文本，保持显示不删除，但确保元素有内容
-                    if (this.texts.length === 1 && this.texts[0] === '') {
-                        this.element.innerHTML = '&nbsp;'; // 使用不间断空格保持布局
-                    }
+                    // 如果只有一条文本，保持显示不删除
                 }
             }
         }
@@ -121,22 +125,72 @@ class TypewriterEffect {
 
 // 初始化所有打字机效果的函数
 const initTypewriter = () => {
-    const typewriterElements = document.querySelectorAll('.typewriter');
+    const typewriterElements = document.querySelectorAll('.typewriter:not([data-initialized])');
     typewriterElements.forEach((element) => {
+        element.setAttribute('data-initialized', 'true');
         new TypewriterEffect(element as HTMLElement);
     });
 };
 
-// 如果 DOM 已准备好，立即初始化
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTypewriter);
-} else {
-    // DOM 已经准备好，立即执行
+// 使用多层防护确保初始化
+const setupTypewriter = () => {
+    // 第一步：立即初始化
     initTypewriter();
+    
+    // 第二步：定期轮询检查（处理延迟加载的情况）
+    let attempts = 0;
+    const maxAttempts = 20;
+    const pollInterval = setInterval(() => {
+        attempts++;
+        const uninitialized = document.querySelectorAll('.typewriter:not([data-initialized])');
+        if (uninitialized.length > 0) {
+            initTypewriter();
+        }
+        if (attempts >= maxAttempts) {
+            clearInterval(pollInterval);
+        }
+    }, 100);
+    
+    // 第三步：监听 Swup 页面切换事件
+    document.addEventListener('swup:contentReplaced', () => {
+        requestAnimationFrame(() => {
+            initTypewriter();
+        });
+    });
+};
+
+// 在脚本加载完后立即执行
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setupTypewriter();
+    });
+    // 同时也尝试在其他时机立即执行
+    document.addEventListener('readystatechange', () => {
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
+            setupTypewriter();
+        }
+    });
+} else {
+    setupTypewriter();
 }
 
-// 支持页面切换时重新初始化
-document.addEventListener('swup:contentReplaced', initTypewriter);
+// 使用 MutationObserver 检测新插入的元素
+try {
+    const mutationObserver = new MutationObserver(() => {
+        const uninitialized = document.querySelectorAll('.typewriter:not([data-initialized])');
+        if (uninitialized.length > 0) {
+            console.log('[Typewriter] MutationObserver: 发现 ' + uninitialized.length + ' 个新元素');
+            initTypewriter();
+        }
+    });
+    
+    mutationObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+    });
+} catch (e) {
+    console.error('MutationObserver error:', e);
+}
 </script>
 
 <style>
