@@ -1,6 +1,6 @@
 ---
 title: Solution of ABC442
-published: 2026-01-27
+published: 2026-01-25
 tags: [Solution, ABC]
 category: ACM
 draft: false

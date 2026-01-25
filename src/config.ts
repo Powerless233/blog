@@ -25,7 +25,7 @@ export const siteConfig: SiteConfig = {
 	title: "Powerless Blog",
 	subtitle: "",
 	siteURL: "https://powerless233.github.io/blog/", // 请替换为你的站点URL，以斜杠结尾
-	siteStartDate: "2026-01-27", // 站点开始运行日期，用于站点统计组件计算运行天数
+	siteStartDate: "2026-01-25", // 站点开始运行日期，用于站点统计组件计算运行天数
 
 	timeZone: SITE_TIMEZONE,
 
@@ -281,27 +281,27 @@ export const navBarConfig: NavBarConfig = {
 		// 	url: "/content/",
 		// 	icon: "material-symbols:person",
 		// 	children: [
-				// {
-				// 	name: "Anime",
-				// 	url: "/anime/",
-				// 	icon: "material-symbols:movie",
-				// },
-				// {
-				// 	name: "Diary",
-				// 	url: "/diary/",
-				// 	icon: "material-symbols:book",
-				// },
-				// {
-				// 	name: "Gallery",
-				// 	url: "/albums/",
-				// 	icon: "material-symbols:photo-library",
-				// },
-				// {
-				// 	name: "Devices",
-				// 	url: "devices/",
-				// 	icon: "material-symbols:devices",
-				// 	external: false,
-				// },
+		// {
+		// 	name: "Anime",
+		// 	url: "/anime/",
+		// 	icon: "material-symbols:movie",
+		// },
+		// {
+		// 	name: "Diary",
+		// 	url: "/diary/",
+		// 	icon: "material-symbols:book",
+		// },
+		// {
+		// 	name: "Gallery",
+		// 	url: "/albums/",
+		// 	icon: "material-symbols:photo-library",
+		// },
+		// {
+		// 	name: "Devices",
+		// 	url: "devices/",
+		// 	icon: "material-symbols:devices",
+		// 	external: false,
+		// },
 		// 	],
 		// },
 		// {

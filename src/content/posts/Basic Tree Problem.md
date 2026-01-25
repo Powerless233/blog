@@ -1,6 +1,6 @@
 ---
 title: 基础树上问题
-published: 2026-01-27
+published: 2026-01-26
 tags: [Algorithm]
 category: ACM
 draft: false
@@ -11,6 +11,8 @@ draft: false
 树是一种无环连通无向图，具有 $n$ 个节点和 $n-1$ 条边，任意两点之间有且仅有一条简单路径。
 
 本文将讨论的问题较为基础，分别为：**树的遍历**，**树的直径与重心**，**最近公共祖先（LCA）**。
+
+这些问题虽然理解起来都难度不大，但是是后续算法与问题的基石，还请务必自行实现一次。
 
 > 后面预计会补上**树形dp**，**树链剖分**，**点分治与边分治**。如果写好了会把链接贴在这里。
 
@@ -303,10 +305,6 @@ void dfs3(int x, int fa, int dep)
 }
 int main()
 {
-#ifndef ONLINE_JUDGE
-    freopen("test.in", "r", stdin);
-    freopen("test.out", "w", stdout);
-#endif
     n = read();
     for (int i = 1; i < n; i++)
     {
