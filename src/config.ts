@@ -276,11 +276,11 @@ export const navBarConfig: NavBarConfig = {
 				},
 			],
 		},
-		{
-			name: "My",
-			url: "/content/",
-			icon: "material-symbols:person",
-			children: [
+		// {
+		// 	name: "My",
+		// 	url: "/content/",
+		// 	icon: "material-symbols:person",
+		// 	children: [
 				// {
 				// 	name: "Anime",
 				// 	url: "/anime/",
@@ -302,8 +302,8 @@ export const navBarConfig: NavBarConfig = {
 				// 	icon: "material-symbols:devices",
 				// 	external: false,
 				// },
-			],
-		},
+		// 	],
+		// },
 		// {
 		// 	name: "About",
 		// 	url: "/content/",
@@ -590,7 +590,7 @@ export const sakuraConfig: SakuraConfig = {
 
 // Pio 看板娘配置
 export const pioConfig: import("./types/config").PioConfig = {
-	enable: true, // 启用看板娘
+	enable: false, // 启用看板娘
 	models: ["/pio/models/pio/model.json"], // 默认模型路径
 	position: "left", // 模型位置
 	width: 280, // 默认宽度
