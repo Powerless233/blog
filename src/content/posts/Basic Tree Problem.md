@@ -165,9 +165,9 @@ int main()
 在 dfs 过程中，对每个节点 $u$：
 
 - 维护其子节点中最大的两个 $f[v_1] + 1, f[v_2] + 1$；
-- 更新全局答案：$\text{ans} = \max(\text{ans}, f[v_1] + f[v_2])$
+- 更新全局答案：$\text{ans} = \max(\text{ans}, (f[v_1] + 1) + (f[v_2] + 1))$
 
-若某一个节点只有一个儿子，仍然可以使用上面的公式更新，因为第二长的子链长度为 0。
+若某一个节点只有一个儿子，仍然可以使用上面的公式更新，因为第二长的 $f[v_2] + 1$ 为 0。
 
 #### Code
 
@@ -343,3 +343,231 @@ int main()
 #### Sol.0 暴力
 
 作为引入，我们先介绍一个非常暴力的方法。
+
+```
+        1
+       / \
+      2   3
+     / \   \
+    4   5   6
+   /
+  7
+```
+
+在上图中，我们想找到 6 和 7 的 LCA。
+
+注意到 7 的深度比 6 要大，显然它们的 LCA 不可能在两个点的深度之间，所以我们要 **“往上跳”**，跳到它的父节点，然后一直循环直到两个点的深度一致。
+
+现在我们要求的 LCA(6, 7) 就转化为了 LCA(6, 4)。
+
+这个时候，我们就让这两个点 **同时** “向上跳”。
+
+LCA(6, 4) $\rightarrow$ LCA(3, 2)
+
+LCA(3, 2) $\rightarrow$ LCA(1, 1)
+
+最后我们发现 LCA(6, 7) = LCA(1, 1) = 1。
+
+---
+
+这个方法非常的直观，但同时也非常的暴力，复杂度来到了单次查询 $O(n)$。
+
+#### Sol.1 倍增法
+
+在同时向上跳的过程中，如果我们用 0 表示“未找到LCA”，用 1 表示“已找到LCA”，那么这个过程的序列将会是
+
+```
+000...0111...
+```
+
+注意到这个**答案具有单调性**。换句话说，随着答案的增大，问题的可行性呈现**单调变化**，向上跳的越多，越会可能是公共祖先。
+
+可能会想到二分，但我们没有办法在很快的时间获取到某一个节点的第 $k$ 个父节点。因此引入了倍增。
+
+我们记录每个节点的 $1,2,4, ...,2^k$ 个父节点，这样一来，就可以在同时向上跳的过程中，从高位向地位逐次进行，只要 $x$ 和 $y$ 的 $2^k$ 个父节点不相同，那么就同时向上跳 $2^k$ 次，最后， $x$ 和 $y$ 会跳到恰好为它们 LCA 的子节点的位置。
+
+在第一步使 $x$ 与 $y$ 深度一致时，也可以通过将 $dep_x - dep_y$ 的值拆分为二的幂次来优化。
+
+时间复杂度预处理 $O(n\log n)$，单次查询 $O(\log n)$。
+
+#### Code
+
+```cpp
+int n, m, rt, fa[N][25], dep[N];
+vector<int> e[N];
+void dfs(int x, int f, int d)
+{
+    dep[x] = d;
+    fa[x][0] = f;
+    for (int y : e[x])
+    {
+        if (y != f)
+        {
+            dfs(y, x, d + 1);
+        }
+    }
+}
+int LCA(int x, int y)
+{
+    if (dep[x] < dep[y])
+        swap(x, y);
+    int t = dep[x] - dep[y];
+    for (int i = 0; i <= 20; i++)
+    {
+        if (t & (1 << i))
+            x = fa[x][i];
+    }
+    if (x == y)
+        return x;
+    for (int i = 20; i >= 0; i--)
+    {
+        if (fa[x][i] != fa[y][i])
+            x = fa[x][i], y = fa[y][i];
+    }
+    return fa[x][0];
+}
+int main()
+{
+    n = read(), m = read(), rt = read();
+    for (int i = 1; i < n; i++)
+    {
+        int x = read(), y = read();
+        e[x].push_back(y);
+        e[y].push_back(x);
+    }
+    dfs(rt, 0, 0);
+    for (int j = 1; j <= 20; j++)
+        for (int i = 1; i <= n; i++)
+            fa[i][j] = fa[fa[i][j - 1]][j - 1];
+
+    for (int i = 1; i <= m; i++)
+    {
+        int x = read(), y = read();
+        cout << LCA(x, y) << '\n';
+    }
+    return 0;
+}
+```
+
+#### Sol.2 Tarjan
+
+Tarjan 的 LCA 算法是**离线算法**，必须预先知道所有查询，不能动态处理。主要利用了 dfs + 并查集，感觉非常巧妙。
+
+这个感觉用自然语言分析过程太抽象了，还是弄一个例子。
+
+```
+        1
+       / \
+      2   3
+     / \   \
+    4   5   6
+   /
+  7
+```
+
+依旧是这个图，我们要找 LCA(6, 7)。
+
+首先开一个并查集，约定 $\texttt{find(x)}$ 为并查集搜索函数，$\texttt{bind(x, y)}$ 为并查集合并函数，并查集数组为 $\texttt{p[x]}$。
+
+开一个 $\texttt{vis[x]}$ 数组，表示是否访问过这个节点。
+
+首先访问节点 $1$ ，标记 $\texttt{vis[1]=1}$。
+
+依次访问节点 $2, 4$，标记 $\texttt{vis[2]=1, vis[4]=1}$。
+
+访问节点 $7$，标记 $\texttt{vis[7]=1}$，注意到有一个询问 LCA(6, 7)，但发现 $\texttt{vis[6]=0}$，不作处理。
+
+返回节点 $4$，$\texttt{bind(7, 4)}$，注意这里应当为 $\texttt{p[7]=4}$，也就是并查集总是向深度较低的节点合并。
+
+依次返回节点 $2, 1$，$\texttt{bind(4, 2), bind(2, 1)}$。
+
+访问节点 $3$ ，标记 $\texttt{vis[3]=1}$。
+
+访问节点 $6$ ，标记 $\texttt{vis[6]=1}$。注意到有一个询问 LCA(6, 7)，发现 $\texttt{vis[7]=1}$，处理询问。
+
+此时的 $LCA(6, 7) = \texttt{find(7) = 1}$。
+
+---
+
+这个算法巧妙的点就在：**将并查集的逻辑树 与 原树的层次结构 建立了联系**，将 LCA 的查询转化为对并查集根节点的查询。
+
+可以尝试想象在并查集合并过程中，一颗子树中的所有节点都指向这颗子树的根节点，查询的时候相当于在这颗并查集逻辑树上找根。
+
+时间复杂度**近似线性**： $ O(n + q \cdot \alpha(n)) $，其中 $\alpha(x)$ 为反阿克曼函数。
+
+#### Code
+
+```cpp
+int n, m, rt;
+int id[N], tot = 0;
+int ans[N];
+bool vis[N];
+vector<int> e[N];
+struct Question
+{
+    int y, id;
+};
+vector<Question> q[N];
+int p[N];
+int find(int x)
+{
+    if (p[x] == x)
+        return x;
+    return p[x] = find(p[x]);
+}
+void Bind(int x, int y)
+{
+    p[find(x)] = find(y);
+}
+void Tarjan(int x)
+{
+    vis[x] = 1;
+    for (int i = 0; i < e[x].size(); i++)
+    {
+        int y = e[x][i];
+        if (!vis[y])
+        {
+            Tarjan(y);
+            Bind(y, x); // 朝根节点的方向合并
+        }
+    }
+    for (int i = 0; i < q[x].size(); i++)
+    {
+        int y, id;
+        y = q[x][i].y, id = q[x][i].id;
+        if (vis[y])
+            ans[id] = find(y);
+    }
+}
+int main()
+{
+    n = read(), m = read(), rt = read();
+    for (int i = 1; i <= n; i++)
+        p[i] = i;
+    for (int i = 1; i < n; i++)
+    {
+        int x, y;
+        x = read(), y = read();
+        e[x].push_back(y);
+        e[y].push_back(x);
+    }
+    for (int i = 1; i <= m; i++)
+    {
+        int x, y;
+        x = read(), y = read();
+        if (x == y)
+            ans[i] = x;
+        else
+        {
+            q[x].push_back({y, i});
+            q[y].push_back({x, i});
+        }
+    }
+    Tarjan(rt);
+    for (int i = 1; i <= m; i++)
+    {
+        cout << ans[i] << '\n';
+    }
+    return 0;
+}
+```
