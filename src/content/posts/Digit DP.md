@@ -125,3 +125,11 @@ int main()
 别的我不会。
 
 做数位 dp 题的核心思路就是递归从高位向低位枚举，然后看到底有什么东西会影响答案，比如这道题就是前面位数的数字和。
+
+### 练习题
+
+#### [P2106 Sam 数 - 洛谷](https://www.luogu.com.cn/problem/P2106)
+
+#### [P4124 [CQOI2016] 手机号码 - 洛谷](https://www.luogu.com.cn/problem/P4124)
+
+#### [P2518 [HAOI2010] 计数 - 洛谷](https://www.luogu.com.cn/problem/P2518)
