@@ -41,7 +41,7 @@ draft: false
 
 记 string a, b。令 f[i] 表示使前 i 列格子符合要求的最小操作数。
 
-转移就两种：$A \\ A$  或者 $ AA \\ BB$ 。
+转移就两种：$$A \\ A$$  或者 $$ AA \\ BB$$ 。
 
 f[i] = min(f[i - 1] +  (a[i] != b[i]), f[i - 2] + (a[i] != a[i - 1]) + (b[i] != b[i - 1]))
 
