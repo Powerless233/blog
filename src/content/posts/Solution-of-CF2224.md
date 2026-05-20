@@ -1,5 +1,5 @@
 ---
-title: Solution of CF1097
+title: Solution of CF2224
 published: 2026-05-06
 tags: [Solution, CF]
 category: ACM
@@ -8,7 +8,7 @@ draft: false
 
 # Codeforces Round 1097 Div.2
 
-Link here: https://codeforces.com/contest/2224
+这场比较偏向 trick，见过就会比较好做。
 
 ## A. Zhily and Array Operating
 
