@@ -1,6 +1,6 @@
 ---
 title: Solution of CF2225
-published: 2026-05-06
+published: 2026-05-20
 tags: [Solution, CF]
 category: ACM
 draft: false
