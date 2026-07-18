@@ -21,7 +21,7 @@ Presented By 137QWQ & Powerless。
 
 ## Problem A. Lasers
 
-> Quesion By qwq.
+> Question By qwq.
 
 ### Description
 
@@ -77,7 +77,7 @@ signed main()
 
 ## Problem B. Odd Steps
 
-> Quesion By Powerless.
+> Question By Powerless.
 
 ### Description
 
@@ -344,7 +344,7 @@ signed main()
 
 ## Problem D. Rational Bubble Sort
 
-> Quesion By qwq.
+> Question By qwq.
 
 ### Description
 
@@ -424,7 +424,7 @@ signed main()
 
 ## Problem E. Another Array Problem
 
-> Quesion By Powerless.
+> Question By Powerless.
 
 ### Description
 
@@ -571,7 +571,7 @@ signed main()
 
 ## Problem F. Bucket Bonanza
 
-> Quesion By qwq.
+> Question By qwq.
 
 ### Description
 
@@ -662,7 +662,7 @@ signed main()
 
 ## Problem G. Manga
 
-> Quesion By Powerless.
+> Question By Powerless.
 
 ### Description
 
@@ -732,7 +732,7 @@ int main()
 
 ## Problem H. Exactly K Steps
 
-> Quesion By Powerless.
+> Question By Powerless.
 
 ### Description
 
@@ -855,7 +855,7 @@ int main()
 
 ## Problem I. Blackout 2
 
-> Quesion By Powerless.
+> Question By Powerless.
 
 ### Description
 
@@ -962,7 +962,7 @@ int main()
 
 ## Problem J. Optimal Shifts
 
-> Quesion By qwq.
+> Question By qwq.
 
 ### Description
 
@@ -1036,7 +1036,7 @@ signed main()
 
 ## Problem K. Exceptional Segments
 
-> Quesion By qwq.
+> Question By qwq.
 
 ### Description
 
@@ -1139,7 +1139,7 @@ signed main()
 
 ## Problem L. Interactive Graph (Hard Version)
 
-> Quesion By qwq.
+> Question By qwq.
 
 ### Description
 
@@ -1236,7 +1236,7 @@ signed main()
 
 ## Problem M. Manipulating History
 
-> Quesion By Powerless.
+> Question By Powerless.
 
 ### Description
 

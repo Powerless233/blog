@@ -144,8 +144,8 @@ inline int find(int x)
 }
 signed main()
 {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     cin >> n >> m >> q;
     vector<vector<int>> a(n + 1, vector<int>(m + 1, 0));
     vector<vector<int>> id(n + 1, vector<int>(m + 1, 0));
