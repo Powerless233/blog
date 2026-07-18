@@ -1,7 +1,7 @@
 ---
 title: 2026暑期训练赛4
 published: 2026-07-17
-tags: [Algorithm]
+tags: [Contest]
 category: ACM
 draft: false
 ---
