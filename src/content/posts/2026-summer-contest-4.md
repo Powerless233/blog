@@ -227,7 +227,7 @@ signed main()
 
 ## Problem C. yichen
 
-> Quesion By Powerless.
+> Question By Powerless.
 
 ### Description
 
